@@ -60,4 +60,5 @@ func Header(str string) {
 func Quote(args ...any) {
 	Println()
 	Println("  " + fmt.Sprint(args...))
+	Println()
 }
