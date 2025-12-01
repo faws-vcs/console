@@ -63,7 +63,7 @@ func main() {
 
 	for {
 		for i := range bars_progress {
-			bars_progress[i] += float64(random_int(200+(random_int(50)*10))) / 10000
+			bars_progress[i] += float64(random_int(5)) / 10000
 		}
 
 		all_progress_bars_complete := true
@@ -77,7 +77,7 @@ func main() {
 			break
 		}
 		console.SwapHud()
-		time.Sleep(50 * time.Millisecond)
+		time.Sleep(1 * time.Millisecond)
 	}
 	console.SwapHud()
 

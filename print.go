@@ -13,9 +13,9 @@ var status int = 0
 // Print generic information to os.Stdout
 func Println(args ...any) (n int, err error) {
 	hud.guard.Lock()
-	hud.erase(hud.num_lines)
+	hud.erase(os.Stdout, hud.num_lines)
 	n, err = fmt.Fprintln(os.Stdout, args...)
-	hud.present()
+	hud.present(os.Stdout)
 	hud.newline_printed = true
 	hud.guard.Unlock()
 	return
@@ -33,7 +33,7 @@ func Fatal(args ...any) {
 	WriteText(line[6:], " ", None, None)
 	WriteText(line[7:], text, None, None)
 
-	hud.erase(hud.num_lines)
+	hud.erase(os.Stdout, hud.num_lines)
 	var message bytes.Buffer
 	render_line(&message, line)
 	message.WriteByte('\n')

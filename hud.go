@@ -2,6 +2,7 @@ package console
 
 import (
 	"bytes"
+	"io"
 	"os"
 	"sync"
 	"sync/atomic"
@@ -45,28 +46,28 @@ func (h *Hud) render() {
 }
 
 // non-goroutine-safe
-func (h *Hud) erase(lines int) {
+func (h *Hud) erase(w io.Writer, lines int) {
 	if lines == 0 {
 		return
 	}
 	var err error
 	// erase the line
-	if _, err = os.Stdout.Write(ansics_erase_line); err != nil {
+	if _, err = w.Write(ansics_erase_line); err != nil {
 		panic(err)
 	}
 	for i := 0; i < lines-1; i++ {
 		// move the cursor up 1
-		if _, err = os.Stdout.Write(ansics_cursor_up); err != nil {
+		if _, err = w.Write(ansics_cursor_up); err != nil {
 			panic(err)
 		}
 		// erase the line
-		if _, err = os.Stdout.Write(ansics_erase_line); err != nil {
+		if _, err = w.Write(ansics_erase_line); err != nil {
 			panic(err)
 		}
 	}
 
 	// move cursor to 0 cell
-	if _, err = os.Stdout.Write(ansi_cr); err != nil {
+	if _, err = w.Write(ansi_cr); err != nil {
 		panic(err)
 	}
 }
@@ -108,8 +109,8 @@ func (h *Hud) Line(components ...Component) {
 	h.num_lines++
 }
 
-func (h *Hud) present() {
-	os.Stdout.Write(h.lines.Bytes())
+func (h *Hud) present(w io.Writer) {
+	w.Write(h.lines.Bytes())
 }
 
 // Erases the previously printed hud and renders the updated version
@@ -119,10 +120,14 @@ func SwapHud() {
 	num_lines := hud.num_lines
 	// render the new Hud
 	hud.render()
+	// erase and present in one buffer to avoid flickering
+	var swap_buffer bytes.Buffer
 	// erase the old Hud
-	hud.erase(num_lines)
+	hud.erase(&swap_buffer, num_lines)
 	// print the new Hud
-	hud.present()
+	hud.present(&swap_buffer)
+
+	os.Stdout.Write(swap_buffer.Bytes())
 
 	hud.guard.Unlock()
 }
