@@ -46,7 +46,7 @@ func (t *Text) Render(line []Cell) (n int, err error) {
 
 	switch t.Stylesheet.Alignment {
 	case Left:
-		start_index = margin_left
+		start_index = 0
 	case Right:
 		start_index = len(line) - t.Stylesheet.Width
 	case Center:
