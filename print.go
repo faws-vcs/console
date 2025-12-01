@@ -4,6 +4,7 @@ import (
 	"bytes"
 	"fmt"
 	"os"
+	"strings"
 	"unicode/utf8"
 )
 
@@ -18,10 +19,6 @@ func Println(args ...any) (n int, err error) {
 	hud.newline_printed = true
 	hud.guard.Unlock()
 	return
-}
-
-func Info(args ...any) {
-	Println(args...)
 }
 
 func Fatal(args ...any) {
@@ -46,4 +43,21 @@ func Fatal(args ...any) {
 	hud.guard.Unlock()
 
 	Close()
+}
+
+// str
+// ---
+func Header(str string) {
+	Println(str)
+	var sb strings.Builder
+	count := utf8.RuneCountInString(str)
+	for i := 0; i < count; i++ {
+		sb.WriteByte('-')
+	}
+	Println(sb.String())
+}
+
+func Quote(args ...any) {
+	Println()
+	Println("  " + fmt.Sprint(args...))
 }
