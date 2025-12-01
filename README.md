@@ -1,22 +1,17 @@
 # faws-vcs/console
 
+[![Go Reference](https://pkg.go.dev/badge/github.com/faws-vcs/faws.svg)](https://pkg.go.dev/github.com/faws-vcs/console)
+[![License: GPL v3](https://img.shields.io/badge/License-GPLv3-blue.svg)](https://www.gnu.org/licenses/gpl-3.0)
+
 `console` provides an immediate-mode rendering framework for miniature terminal-based UIs.
 
 In this package, you are provided with a live text area (called a Hud) that you can print to using your custom `RendererFunc`.
-
-With this framework, you aren't forced to keep which components appear on screen, or where they appear. They appear and disappear immediately depending on the behavior of your `console.RendererFunc`.
-
-The package includes built-in customizable components like `ProgressBar`, `Spinner`, and `Text`. Components are configurable via `Stylesheet` properties, allowing you to set alignment, area width, margins, and even the specific characters used for rendering (e.g., customizing the characters for a progress bar).
-
-Manually trigger a re-render of the Hud using `console.SwapHud()`.
-
-Set an automatic update interval with `console.SwapInterval(duration)` to handle periodic UI updates (e.g., every second).
 
 ```go
 // Open the console
 console.Open()
 
-// Print a normal line to the background (above the )
+// Print a normal line to the background (always printed above the Hud)
 console.Println("Hello, this is normal line")
 
 // Set a Hud renderer function
