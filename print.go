@@ -24,7 +24,7 @@ func Println(args ...any) (n int, err error) {
 func Fatal(args ...any) {
 	hud.guard.Lock()
 
-	// exit with this code in Fatal
+	// exit with this code in Close
 	status = 1
 
 	text := fmt.Sprint(args...)
@@ -58,7 +58,13 @@ func Header(str string) {
 }
 
 func Quote(args ...any) {
+	var buffer strings.Builder
+	fmt.Fprint(&buffer, args...)
+
+	lines := strings.Split(buffer.String(), "\n")
 	Println()
-	Println("  " + fmt.Sprint(args...))
+	for _, line := range lines {
+		Println(" ", line)
+	}
 	Println()
 }

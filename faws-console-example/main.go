@@ -24,6 +24,8 @@ func main() {
 
 	console.Println("Hello world")
 
+	console.Quote("I\nLove\nDoing\nStuff")
+
 	console.RenderFunc(func(hud *console.Hud) {
 		var spinner console.Spinner
 		spinner.Stylesheet.Sequence[0] = console.Cell{'⡿', console.BrightBlue, 0}
