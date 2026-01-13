@@ -45,6 +45,10 @@ func (h *Hud) render() {
 	h.in_render.Store(false)
 }
 
+func (h *Hud) Exiting() bool {
+	return !h.active.Load()
+}
+
 // non-goroutine-safe
 func (h *Hud) erase(w io.Writer, lines int) {
 	if lines == 0 {
@@ -113,9 +117,7 @@ func (h *Hud) present(w io.Writer) {
 	w.Write(h.lines.Bytes())
 }
 
-// Erases the previously printed hud and renders the updated version
-func SwapHud() {
-	hud.guard.Lock()
+func (h *Hud) swap() {
 	// save the old number of lines
 	num_lines := hud.num_lines
 	// render the new Hud
@@ -128,7 +130,12 @@ func SwapHud() {
 	hud.present(&swap_buffer)
 
 	os.Stdout.Write(swap_buffer.Bytes())
+}
 
+// Erases the previously printed hud and renders the updated version
+func SwapHud() {
+	hud.guard.Lock()
+	hud.swap()
 	hud.guard.Unlock()
 }
 

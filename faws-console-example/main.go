@@ -22,11 +22,14 @@ func main() {
 
 	bars_progress := make([]float64, 8)
 
-	console.Println("Hello world")
+	// console.Println("Hello world")
 
-	console.Quote("I\nLove\nDoing\nStuff")
+	// console.Quote("I\nLove\nDoing\nStuff")
 
 	console.RenderFunc(func(hud *console.Hud) {
+		if hud.Exiting() {
+			return
+		}
 		var spinner console.Spinner
 		spinner.Stylesheet.Sequence[0] = console.Cell{'⡿', console.BrightBlue, 0}
 		spinner.Stylesheet.Sequence[1] = console.Cell{'⣟', console.BrightBlue, 0}

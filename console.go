@@ -14,8 +14,9 @@ func Open() {
 
 // Required: shut down console systems at end of process
 func Close() {
+	hud.active.Store(false)
 	hud.guard.Lock()
-	hud.erase(os.Stdout, hud.num_lines)
+	hud.swap()
 	hud.guard.Unlock()
 	os.Exit(status)
 }
