@@ -7,6 +7,7 @@ import (
 
 // Required: start up console systems at end of process
 func Open() {
+	hud.renderer_func = func(h *Hud) {}
 	hud.newline_printed = true
 	hud.active.Store(true)
 	hud.start_time = time.Now()
