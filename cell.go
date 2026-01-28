@@ -4,6 +4,8 @@ import (
 	"bytes"
 	"fmt"
 	"io"
+
+	"github.com/mattn/go-runewidth"
 )
 
 // A cell is a colorable UTF-8 character that takes up 1 width in the terminal (Hud).
@@ -13,6 +15,14 @@ type Cell struct {
 	Fg Color
 	// Background color
 	Bg Color
+}
+
+// some runes take up multiple cells
+func rune_cell_width(r rune) int {
+	var condition runewidth.Condition
+	condition.EastAsianWidth = true
+	condition.StrictEmojiNeutral = true
+	return condition.RuneWidth(r)
 }
 
 func set_color(w io.Writer, fg, bg Color) {
@@ -59,6 +69,10 @@ func render_line(buffer *bytes.Buffer, line []Cell) {
 		current_fg_color = cell.Fg
 		if cell.Rune == 0 {
 			buffer.WriteByte(' ')
+			continue
+		}
+		if cell.Rune == 0x80 {
+			// this is a padding cell. these are injected after a wide character is used, so we don't need to do anything here.
 			continue
 		}
 		if cell.Rune == '\n' || cell.Rune == '\r' {

@@ -10,6 +10,19 @@ import (
 
 var status int = 0
 
+// Put displays colored text cells to os.Stdout
+func Put(text []Cell) {
+	var line_buffer bytes.Buffer
+	render_line(&line_buffer, text)
+	line_buffer.WriteByte('\n')
+	hud.guard.Lock()
+	hud.erase(os.Stdout, hud.num_lines)
+	os.Stdout.Write(line_buffer.Bytes())
+	hud.present(os.Stdout)
+	hud.newline_printed = true
+	hud.guard.Unlock()
+}
+
 // Print generic information to os.Stdout
 func Println(args ...any) (n int, err error) {
 	hud.guard.Lock()
@@ -33,16 +46,16 @@ func Fatal(args ...any) {
 	WriteText(line[6:], " ", None, None)
 	WriteText(line[7:], text, None, None)
 
-	hud.erase(os.Stdout, hud.num_lines)
-	var message bytes.Buffer
-	render_line(&message, line)
-	message.WriteByte('\n')
+	hud.final_message = line
 
-	os.Stdout.Write(message.Bytes())
+	// hud.erase(os.Stdout, hud.num_lines)
+	// var message bytes.Buffer
+	// render_line(&message, line)
+	// message.WriteByte('\n')
 
+	// os.Stdout.Write(message.Bytes())
+	close_internal()
 	hud.guard.Unlock()
-
-	Close()
 }
 
 // str

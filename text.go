@@ -62,7 +62,16 @@ func WriteText(text []Cell, s string, fg, bg Color) (n int, err error) {
 	buffer := bytes.NewBufferString(s)
 
 	var r rune
+	var padding int
 	for i := 0; i < len(text); i++ {
+		// we may need to insert padding cells
+		// if a previous cell was wider than 1
+		if padding > 0 {
+			text[i].Rune = 0x80
+			n = i + 1
+			padding--
+			continue
+		}
 		r, _, err = buffer.ReadRune()
 		if errors.Is(err, io.EOF) {
 			err = nil
@@ -72,6 +81,11 @@ func WriteText(text []Cell, s string, fg, bg Color) (n int, err error) {
 		text[i].Fg = fg
 		text[i].Bg = bg
 		n = i + 1
+
+		cell_width := rune_cell_width(r)
+		if cell_width > 1 {
+			padding = cell_width - 1
+		}
 	}
 	return
 }

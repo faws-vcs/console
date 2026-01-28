@@ -20,6 +20,7 @@ type Hud struct {
 	lines           bytes.Buffer
 	newline_printed bool
 	start_time      time.Time
+	final_message   []Cell
 }
 
 type Component interface {
