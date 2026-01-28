@@ -37,7 +37,7 @@ func main() {
 	console.RenderFunc(func(hud *console.Hud) {
 		if hud.Exiting() {
 			var message console.Text
-			message.Stylesheet.Width = console.Width() - 1
+			message.Stylesheet.Width = console.Width()
 			// message.Add("Now exiting.", console.Black, console.BrightBlue)
 			message.Add("👋 bye-bye!", 0, 0)
 			hud.Line(&message)
