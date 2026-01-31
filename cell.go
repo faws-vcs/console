@@ -17,8 +17,15 @@ type Cell struct {
 	Bg Color
 }
 
+func string_cell_count(s string) (n int) {
+	for _, r := range s {
+		n += rune_cell_count(r)
+	}
+	return
+}
+
 // some runes take up multiple cells
-func rune_cell_width(r rune) int {
+func rune_cell_count(r rune) int {
 	var condition runewidth.Condition
 	condition.EastAsianWidth = true
 	condition.StrictEmojiNeutral = true

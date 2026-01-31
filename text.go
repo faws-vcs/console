@@ -5,7 +5,6 @@ import (
 	"errors"
 	"fmt"
 	"io"
-	"unicode/utf8"
 )
 
 type Text struct {
@@ -14,7 +13,7 @@ type Text struct {
 }
 
 func (t *Text) Add(s string, fg, bg Color) (err error) {
-	text_cells := make([]Cell, utf8.RuneCountInString(s))
+	text_cells := make([]Cell, string_cell_count(s))
 	_, err = WriteText(text_cells, s, fg, bg)
 	if err != nil {
 		return
@@ -82,7 +81,7 @@ func WriteText(text []Cell, s string, fg, bg Color) (n int, err error) {
 		text[i].Bg = bg
 		n = i + 1
 
-		cell_width := rune_cell_width(r)
+		cell_width := rune_cell_count(r)
 		if cell_width > 1 {
 			padding = cell_width - 1
 		}
