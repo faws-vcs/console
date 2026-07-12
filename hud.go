@@ -29,6 +29,11 @@ type Component interface {
 
 type RendererFunc func(h *Hud)
 
+func init() {
+	// There must always be a renderer func
+	hud.renderer_func = func(h *Hud) {}
+}
+
 // Set a function to render your Hud
 func RenderFunc(f RendererFunc) {
 	hud.guard.Lock()
